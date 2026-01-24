@@ -1,50 +1,190 @@
-# Welcome to your Expo app 👋
+# My City 🌍
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A beautiful memory pin map app for your favorite cities. Drop pins on the map to save your memories from around the world.
 
-## Get started
+## Supported Cities
 
-1. Install dependencies
+| City | Emoji | Country |
+|------|-------|---------|
+| 京都 (Kyoto) | ⛩️ | Japan |
+| シドニー (Sydney) | ⛵ | Australia |
+| パリ (Paris) | 🗼 | France |
+| ロンドン (London) | 🎡 | United Kingdom |
+| ローマ (Rome) | 🏛️ | Italy |
+| バンコク (Bangkok) | 🛕 | Thailand |
+| クアンタン (Kuantan) | 🏖️ | Malaysia |
+| 東京 (Tokyo) | 🗼 | Japan |
+| 台北 (Taipei) | 🏯 | Taiwan |
+| バルセロナ (Barcelona) | 🏗️ | Spain |
+| ベルリン (Berlin) | 🐻 | Germany |
+| リオ (Rio de Janeiro) | 🎭 | Brazil |
+| マラケシュ (Marrakech) | 🕌 | Morocco |
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+- 📍 Interactive map centered on your chosen city
+- 📸 Photo pins with image preview
+- 🔤 Text pins with custom emoji/character
+- 🏷️ Category-based organization
+- ⭐ Pin ranking system (1-3 stars)
+- 🔍 Filter by categories
+- 🎨 City-specific themes and color palettes
 
-   ```bash
-   npx expo start
-   ```
+## Tech Stack
 
-In the output, you'll find options to open the app in a
+- [Expo](https://expo.dev) with Expo Router
+- React Native Maps with clustering
+- Zustand for state management
+- Bottom Sheet for modal interactions
+- TypeScript
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Getting Started
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Install dependencies
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Start the app for a specific city
 
-## Learn more
+```bash
+# Start for Kyoto (default)
+npm run start:kyoto
 
-To learn more about developing your project with Expo, look at the following resources:
+# Start for other cities
+npm run start:sydney
+npm run start:paris
+npm run start:london
+npm run start:rome
+npm run start:bangkok
+npm run start:kuantan
+npm run start:tokyo
+npm run start:taipei
+npm run start:barcelona
+npm run start:berlin
+npm run start:rio
+npm run start:marrakech
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 3. Run on your device
 
-## Join the community
+Use one of the following:
+- [Expo Go](https://expo.dev/go)
+- [iOS Simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Android Emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 
-Join our community of developers creating universal apps.
+## Building for Production
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Build for a specific city
+
+```bash
+# Build Kyoto version
+npm run build:kyoto
+
+# Build Paris version
+npm run build:paris
+
+# etc...
+```
+
+### Manual build with custom city
+
+```bash
+# On macOS/Linux
+CITY=kyoto npx expo start
+
+# On Windows (PowerShell)
+$env:CITY="kyoto"; npx expo start
+
+# Cross-platform (requires cross-env)
+npx cross-env CITY=kyoto expo start
+```
+
+## Project Structure
+
+```
+src/
+├── config/
+│   ├── types.ts                # City config type definitions
+│   ├── index.ts                # Main config entry point
+│   └── cities/                 # City-specific configurations
+│       ├── kyoto.ts
+│       ├── sydney.ts
+│       ├── paris.ts
+│       └── ...
+├── components/
+│   ├── map/
+│   │   └── CityMap.tsx         # Main map component
+│   └── ui/
+│       ├── MapOverlay.tsx      # Floating UI controls
+│       ├── CategorySheet.tsx   # Category filter sheet
+│       └── PinDetailSheet.tsx  # Pin preview sheet
+├── constants/
+│   └── city-theme.ts           # Design system exports
+├── screens/
+│   ├── ShowcaseMapScreen.tsx   # Main screen
+│   ├── AddMemoryScreen.tsx     # Pin creation
+│   └── PinDetailScreen.tsx     # Full pin details
+├── store/
+│   └── useStore.ts             # Zustand store
+└── types/
+    └── index.ts                # TypeScript types
+```
+
+## Adding a New City
+
+1. Create a new config file in `src/config/cities/`:
+
+```typescript
+// src/config/cities/newcity.ts
+import { CityConfig } from '../types';
+
+export const newcityConfig: CityConfig = {
+  id: 'newcity',
+  name: 'New City',
+  nameJa: 'ニューシティ',
+  // ... add all required config
+};
+```
+
+2. Export from `src/config/cities/index.ts`:
+
+```typescript
+export { newcityConfig } from './newcity';
+// Add to CITIES map
+```
+
+3. Add app config in `app.config.js`:
+
+```javascript
+const CITY_APP_CONFIG = {
+  // ... existing cities
+  newcity: {
+    name: 'My New City',
+    // ...
+  },
+};
+```
+
+4. Add scripts to `package.json`:
+
+```json
+{
+  "scripts": {
+    "start:newcity": "cross-env CITY=newcity expo start",
+    "build:newcity": "cross-env CITY=newcity eas build"
+  }
+}
+```
+
+## Design Philosophy
+
+- **Map as the main UI** - The map is always the hero
+- **Personal memories** - No social features, reviews, or ratings
+- **Minimal UI** - Screenshot-friendly, clean aesthetic
+- **City-specific themes** - Each city has its unique color palette
+
+## License
+
+MIT

@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Showcase Map Screen
+// My City - Showcase Map Screen
 // Main screen - full-screen map with memories
 // ============================================
 
@@ -9,9 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { COLORS } from '../constants/theme';
+import { CITY_THEME_COLORS } from '../constants/city-theme';
 import { RootStackParamList, MemoryPin } from '../types';
-import KyotoMap from '../components/map/KyotoMap';
+import CityMap from '../components/map/CityMap';
 import MapOverlay from '../components/ui/MapOverlay';
 import CategorySheet from '../components/ui/CategorySheet';
 import PinDetailSheet from '../components/ui/PinDetailSheet';
@@ -64,7 +64,7 @@ export default function ShowcaseMapScreen() {
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
         {/* Full-screen map */}
-        <KyotoMap
+        <CityMap
           onPinPress={handlePinPress}
           onLongPress={handleLongPress}
         />
@@ -95,8 +95,6 @@ export default function ShowcaseMapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: CITY_THEME_COLORS.background,
   },
 });
-
-

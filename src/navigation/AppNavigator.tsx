@@ -1,12 +1,12 @@
 // ============================================
-// My Kyoto - Navigation Configuration
+// My Sydney - Navigation Configuration
 // ============================================
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { COLORS } from '../constants/theme';
+import { SYDNEY_COLORS } from '../constants/sydney-theme';
 
 // Screens
 import ShowcaseMapScreen from '../screens/ShowcaseMapScreen';
@@ -24,7 +24,7 @@ export default function AppNavigator() {
           headerShown: false,
           animation: 'slide_from_right',
           contentStyle: {
-            backgroundColor: COLORS.background,
+            backgroundColor: SYDNEY_COLORS.background,
           },
         }}
       >
@@ -48,5 +48,3 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
-
-

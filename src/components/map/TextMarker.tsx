@@ -1,11 +1,11 @@
 // ============================================
-// My Kyoto - Text Pin Marker
+// My City - Text Pin Marker
 // Single character in styled circle
 // ============================================
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { COLORS, PIN_SIZE, SHADOWS, RADIUS, TYPOGRAPHY } from '../../constants/theme';
+import { CITY_THEME_COLORS, CITY_PIN_SIZE, CITY_SHADOWS, CITY_RADIUS, CITY_TYPOGRAPHY } from '../../constants/city-theme';
 
 interface TextMarkerProps {
   textChar: string;
@@ -16,11 +16,11 @@ interface TextMarkerProps {
 export default function TextMarker({
   textChar,
   onPress,
-  size = PIN_SIZE.text,
+  size = CITY_PIN_SIZE.text,
 }: TextMarkerProps) {
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <View style={[styles.marker, { width: size, height: size }, SHADOWS.md]}>
+      <View style={[styles.marker, { width: size, height: size }, CITY_SHADOWS.md]}>
         <Text style={styles.text}>{textChar}</Text>
       </View>
       <View style={styles.pointer} />
@@ -33,16 +33,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   marker: {
-    borderRadius: RADIUS.full,
+    borderRadius: CITY_RADIUS.full,
     borderWidth: 2,
-    borderColor: COLORS.textPin,
-    backgroundColor: COLORS.backgroundCard,
+    borderColor: CITY_THEME_COLORS.textPin,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    fontSize: TYPOGRAPHY.fontSize.xl,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.xl,
+    color: CITY_THEME_COLORS.textPrimary,
     fontWeight: '600',
   },
   pointer: {
@@ -53,9 +53,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 8,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: COLORS.textPin,
+    borderTopColor: CITY_THEME_COLORS.textPin,
     marginTop: -2,
   },
 });
-
-

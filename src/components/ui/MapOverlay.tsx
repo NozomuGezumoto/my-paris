@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Map Overlay UI
+// My City - Map Overlay UI
 // Minimal UI elements floating over the map
 // ============================================
 
@@ -7,7 +7,14 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, TYPOGRAPHY, SPACING, RADIUS, SHADOWS } from '../../constants/theme';
+import {
+  CITY_THEME_COLORS,
+  CITY_TYPOGRAPHY,
+  CITY_SPACING,
+  CITY_RADIUS,
+  CITY_SHADOWS,
+  CITY_EMOJI,
+} from '../../constants/city-theme';
 import { useStore } from '../../store/useStore';
 
 interface MapOverlayProps {
@@ -33,7 +40,7 @@ export default function MapOverlay({ onCategoryPress, onAddPress }: MapOverlayPr
   return (
     <>
       {/* Top overlay - Pin count */}
-      <View style={[styles.topContainer, { top: insets.top + SPACING.md }]}>
+      <View style={[styles.topContainer, { top: insets.top + CITY_SPACING.md }]}>
         <View style={styles.countBadge}>
           <Text style={styles.countNumber}>{filteredPinsCount}</Text>
           <Text style={styles.countLabel}>memories</Text>
@@ -41,7 +48,7 @@ export default function MapOverlay({ onCategoryPress, onAddPress }: MapOverlayPr
       </View>
 
       {/* Bottom overlay - Action buttons */}
-      <View style={[styles.bottomContainer, { bottom: insets.bottom + SPACING.xl }]}>
+      <View style={[styles.bottomContainer, { bottom: insets.bottom + CITY_SPACING.xl }]}>
         {/* Left side buttons */}
         <View style={styles.leftButtons}>
           {/* Display mode toggle - single button */}
@@ -53,9 +60,9 @@ export default function MapOverlay({ onCategoryPress, onAddPress }: MapOverlayPr
             }}
           >
             {displayMode === 'photo' ? (
-              <Ionicons name="image" size={20} color={COLORS.textPrimary} />
+              <Ionicons name="image" size={20} color={CITY_THEME_COLORS.textPrimary} />
             ) : (
-              <Text style={styles.displayModeToggleText}>文</Text>
+              <Text style={styles.displayModeToggleText}>A</Text>
             )}
           </Pressable>
 
@@ -64,7 +71,7 @@ export default function MapOverlay({ onCategoryPress, onAddPress }: MapOverlayPr
             style={[styles.actionButton, styles.categoryButton]}
             onPress={onCategoryPress}
           >
-            <Ionicons name="layers-outline" size={22} color={COLORS.textPrimary} />
+            <Ionicons name="layers-outline" size={22} color={CITY_THEME_COLORS.textPrimary} />
             <Text style={styles.actionButtonText}>Categories</Text>
           </Pressable>
         </View>
@@ -74,13 +81,13 @@ export default function MapOverlay({ onCategoryPress, onAddPress }: MapOverlayPr
           style={[styles.actionButton, styles.addButton]}
           onPress={onAddPress}
         >
-          <Ionicons name="add" size={28} color={COLORS.textPrimary} />
+          <Ionicons name="add" size={28} color={CITY_THEME_COLORS.backgroundCard} />
         </Pressable>
       </View>
 
-      {/* App title - subtle branding */}
-      <View style={[styles.brandContainer, { top: insets.top + SPACING.md }]}>
-        <Text style={styles.brandText}>京</Text>
+      {/* App title - city emoji branding */}
+      <View style={[styles.brandContainer, { top: insets.top + CITY_SPACING.md }]}>
+        <Text style={styles.brandText}>{CITY_EMOJI}</Text>
       </View>
     </>
   );
@@ -89,97 +96,95 @@ export default function MapOverlay({ onCategoryPress, onAddPress }: MapOverlayPr
 const styles = StyleSheet.create({
   topContainer: {
     position: 'absolute',
-    left: SPACING.lg,
-    right: SPACING.lg,
+    left: CITY_SPACING.lg,
+    right: CITY_SPACING.lg,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.md,
+    gap: CITY_SPACING.md,
   },
   countBadge: {
-    backgroundColor: COLORS.mapOverlay,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    paddingHorizontal: CITY_SPACING.lg,
+    paddingVertical: CITY_SPACING.sm,
+    borderRadius: CITY_RADIUS.full,
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: SPACING.sm,
-    ...SHADOWS.sm,
+    gap: CITY_SPACING.sm,
+    ...CITY_SHADOWS.md,
   },
   countNumber: {
-    fontSize: TYPOGRAPHY.fontSize.xxl,
+    fontSize: CITY_TYPOGRAPHY.fontSize.xxl,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   countLabel: {
-    fontSize: TYPOGRAPHY.fontSize.xs,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.xs,
+    color: CITY_THEME_COLORS.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   bottomContainer: {
     position: 'absolute',
-    left: SPACING.lg,
-    right: SPACING.lg,
+    left: CITY_SPACING.lg,
+    right: CITY_SPACING.lg,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
   leftButtons: {
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   displayModeToggle: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.mapOverlay,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: COLORS.primary,
-    ...SHADOWS.sm,
+    borderColor: CITY_THEME_COLORS.accentSecondary,
+    ...CITY_SHADOWS.sm,
   },
   displayModeToggleText: {
     fontSize: 20,
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.textPrimary,
     fontWeight: '600',
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderRadius: RADIUS.full,
-    ...SHADOWS.md,
+    gap: CITY_SPACING.sm,
+    paddingHorizontal: CITY_SPACING.lg,
+    paddingVertical: CITY_SPACING.md,
+    borderRadius: CITY_RADIUS.full,
+    ...CITY_SHADOWS.md,
   },
   categoryButton: {
-    backgroundColor: COLORS.mapOverlay,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
   },
   addButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: CITY_THEME_COLORS.primary,
     width: 56,
     height: 56,
     paddingHorizontal: 0,
     justifyContent: 'center',
   },
   actionButtonText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textPrimary,
     fontWeight: '500',
   },
   brandContainer: {
     position: 'absolute',
-    right: SPACING.lg,
+    right: CITY_SPACING.lg,
   },
   brandText: {
-    fontSize: TYPOGRAPHY.fontSize.display,
+    fontSize: CITY_TYPOGRAPHY.fontSize.display,
     fontWeight: '300',
-    color: COLORS.textPrimary,
-    opacity: 0.3,
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    color: CITY_THEME_COLORS.primary,
+    opacity: 0.4,
+    textShadowColor: 'rgba(255, 255, 255, 0.8)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
   },
 });
-
-

@@ -1,11 +1,11 @@
 // ============================================
-// My Kyoto - Photo Pin Marker
+// My City - Photo Pin Marker
 // Circular thumbnail with border
 // ============================================
 
 import React from 'react';
 import { View, Image, StyleSheet, Pressable } from 'react-native';
-import { COLORS, PIN_SIZE, SHADOWS, RADIUS } from '../../constants/theme';
+import { CITY_THEME_COLORS, CITY_PIN_SIZE, CITY_SHADOWS, CITY_RADIUS } from '../../constants/city-theme';
 
 interface PhotoMarkerProps {
   photoUri: string;
@@ -16,11 +16,11 @@ interface PhotoMarkerProps {
 export default function PhotoMarker({
   photoUri,
   onPress,
-  size = PIN_SIZE.photo,
+  size = CITY_PIN_SIZE.photo,
 }: PhotoMarkerProps) {
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <View style={[styles.marker, { width: size, height: size }, SHADOWS.md]}>
+      <View style={[styles.marker, { width: size, height: size }, CITY_SHADOWS.md]}>
         <Image
           source={{ uri: photoUri }}
           style={[styles.image, { width: size - 6, height: size - 6 }]}
@@ -37,16 +37,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   marker: {
-    borderRadius: RADIUS.full,
+    borderRadius: CITY_RADIUS.full,
     borderWidth: 3,
-    borderColor: COLORS.textPrimary,
-    backgroundColor: COLORS.photoPin,
+    borderColor: CITY_THEME_COLORS.textPrimary,
+    backgroundColor: CITY_THEME_COLORS.photoPin,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    borderRadius: RADIUS.full,
+    borderRadius: CITY_RADIUS.full,
   },
   pointer: {
     width: 0,
@@ -56,9 +56,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 10,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: COLORS.textPrimary,
+    borderTopColor: CITY_THEME_COLORS.textPrimary,
     marginTop: -2,
   },
 });
-
-

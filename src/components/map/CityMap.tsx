@@ -1,6 +1,6 @@
 // ============================================
-// My Kyoto - Main Map Component
-// Full-screen map centered on Kyoto
+// My City - Main Map Component
+// Full-screen map centered on the selected city
 // Using react-native-maps with clustering
 // ============================================
 
@@ -9,52 +9,59 @@ import { StyleSheet, View, Image, Text, Pressable } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
 import ClusteredMapView from 'react-native-map-clustering';
 import { Ionicons } from '@expo/vector-icons';
-import { KYOTO_INITIAL_REGION } from '../../constants/kyoto';
-import { COLORS, PIN_SIZE, SPACING, RADIUS, SHADOWS } from '../../constants/theme';
+import {
+  CITY_INITIAL_REGION,
+  CITY_THEME_COLORS,
+  CITY_PIN_SIZE,
+  CITY_SPACING,
+  CITY_RADIUS,
+  CITY_SHADOWS,
+} from '../../constants/city-theme';
 import { useStore } from '../../store/useStore';
 import { MemoryPin } from '../../types';
 
-// Map style for dark theme (Google Maps)
-const MAP_STYLE = [
-  { elementType: 'geometry', stylers: [{ color: '#1d2c4d' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#8ec3b9' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#1a3646' }] },
-  { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: '#4b6878' }] },
-  { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{ color: '#64779e' }] },
-  { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: [{ color: '#4b6878' }] },
-  { featureType: 'landscape.man_made', elementType: 'geometry.stroke', stylers: [{ color: '#334e87' }] },
-  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#023e58' }] },
-  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#283d6a' }] },
-  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#6f9ba5' }] },
-  { featureType: 'poi', elementType: 'labels.text.stroke', stylers: [{ color: '#1d2c4d' }] },
-  { featureType: 'poi.park', elementType: 'geometry.fill', stylers: [{ color: '#023e58' }] },
-  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#3C7680' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#304a7d' }] },
-  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#98a5be' }] },
-  { featureType: 'road', elementType: 'labels.text.stroke', stylers: [{ color: '#1d2c4d' }] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#2c6675' }] },
-  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#255763' }] },
-  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#b0d5ce' }] },
-  { featureType: 'road.highway', elementType: 'labels.text.stroke', stylers: [{ color: '#023e58' }] },
-  { featureType: 'transit', elementType: 'labels.text.fill', stylers: [{ color: '#98a5be' }] },
-  { featureType: 'transit', elementType: 'labels.text.stroke', stylers: [{ color: '#1d2c4d' }] },
-  { featureType: 'transit.line', elementType: 'geometry.fill', stylers: [{ color: '#283d6a' }] },
-  { featureType: 'transit.station', elementType: 'geometry', stylers: [{ color: '#3a4762' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0e1626' }] },
-  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4e6d70' }] },
+// Generic map style using city colors
+const createMapStyle = (colors: typeof CITY_THEME_COLORS) => [
+  { elementType: 'geometry', stylers: [{ color: colors.background }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: colors.textSecondary }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: colors.background }] },
+  { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: colors.primary }] },
+  { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{ color: colors.textMuted }] },
+  { featureType: 'administrative.province', elementType: 'geometry.stroke', stylers: [{ color: colors.primary }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry.stroke', stylers: [{ color: colors.surface }] },
+  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: colors.surfaceDark }] },
+  { featureType: 'landscape.natural.terrain', elementType: 'geometry', stylers: [{ color: colors.surfaceDark }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: colors.surface }] },
+  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: colors.accentSecondary }] },
+  { featureType: 'poi', elementType: 'labels.text.stroke', stylers: [{ color: colors.background }] },
+  { featureType: 'poi.park', elementType: 'geometry.fill', stylers: [{ color: colors.accentSecondary + '40' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: colors.accentSecondary }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: colors.backgroundElevated }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: colors.textSecondary }] },
+  { featureType: 'road', elementType: 'labels.text.stroke', stylers: [{ color: colors.background }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: colors.surface }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: colors.primary }] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: colors.textPrimary }] },
+  { featureType: 'road.highway', elementType: 'labels.text.stroke', stylers: [{ color: colors.background }] },
+  { featureType: 'transit', elementType: 'labels.text.fill', stylers: [{ color: colors.accent }] },
+  { featureType: 'transit', elementType: 'labels.text.stroke', stylers: [{ color: colors.background }] },
+  { featureType: 'transit.line', elementType: 'geometry.fill', stylers: [{ color: colors.primaryLight }] },
+  { featureType: 'transit.station', elementType: 'geometry', stylers: [{ color: colors.surface }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: colors.primaryLight + '60' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: colors.primary }] },
 ];
 
-interface KyotoMapProps {
+interface CityMapProps {
   onPinPress: (pin: MemoryPin) => void;
   onLongPress?: (coordinates: { latitude: number; longitude: number }) => void;
   interactive?: boolean;
 }
 
-export default function KyotoMap({
+export default function CityMap({
   onPinPress,
   onLongPress,
   interactive = true,
-}: KyotoMapProps) {
+}: CityMapProps) {
   const mapRef = useRef<MapView | null>(null);
   
   // Subscribe to state directly to ensure re-render on changes
@@ -66,6 +73,9 @@ export default function KyotoMap({
   // Track when filter is cleared to force re-render
   const [resetKey, setResetKey] = useState(0);
   const prevCategoryId = useRef(selectedCategoryId);
+
+  // Generate map style based on city colors
+  const mapStyle = useMemo(() => createMapStyle(CITY_THEME_COLORS), []);
 
   useEffect(() => {
     // Only trigger re-render when filter is cleared (category -> null)
@@ -86,9 +96,9 @@ export default function KyotoMap({
     return allPins.filter((pin) => filteredPinIds.includes(pin.id));
   }, [allPins, selectedCategoryId, pinCategories]);
 
-  // Reset map to Kyoto center
+  // Reset map to city center
   const handleResetToCenter = useCallback(() => {
-    mapRef.current?.animateToRegion(KYOTO_INITIAL_REGION, 500);
+    mapRef.current?.animateToRegion(CITY_INITIAL_REGION, 500);
   }, []);
 
   const handleLongPress = useCallback(
@@ -146,15 +156,15 @@ export default function KyotoMap({
     <View style={styles.container}>
       {/* Reset to center button */}
       <Pressable style={styles.resetButton} onPress={handleResetToCenter}>
-        <Ionicons name="locate" size={22} color={COLORS.textPrimary} />
+        <Ionicons name="locate" size={22} color={CITY_THEME_COLORS.accent} />
       </Pressable>
 
       <ClusteredMapView
         key={`map-${resetKey}`}
         mapRef={(ref: MapView | null) => { mapRef.current = ref; }}
         style={styles.map}
-        initialRegion={KYOTO_INITIAL_REGION}
-        customMapStyle={MAP_STYLE}
+        initialRegion={CITY_INITIAL_REGION}
+        customMapStyle={mapStyle}
         onLongPress={handleLongPress}
         showsUserLocation={false}
         showsMyLocationButton={false}
@@ -165,8 +175,8 @@ export default function KyotoMap({
         maxZoomLevel={18}
         onRegionChangeComplete={() => {}}
         // Clustering options
-        clusterColor={COLORS.cluster}
-        clusterTextColor={COLORS.textPrimary}
+        clusterColor={CITY_THEME_COLORS.cluster}
+        clusterTextColor={CITY_THEME_COLORS.backgroundCard}
         clusterFontFamily="System"
         radius={50}
         renderCluster={renderCluster}
@@ -182,10 +192,10 @@ export default function KyotoMap({
           
           // Get rank border color
           const rankBorderColor = pin.rank === 1 
-            ? COLORS.rank1 
+            ? CITY_THEME_COLORS.rank1 
             : pin.rank === 3 
-              ? COLORS.rank3 
-              : COLORS.rank2;
+              ? CITY_THEME_COLORS.rank3 
+              : CITY_THEME_COLORS.rank2;
           
           return (
             <Marker
@@ -226,7 +236,7 @@ export default function KyotoMap({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: CITY_THEME_COLORS.background,
   },
   map: {
     flex: 1,
@@ -234,96 +244,99 @@ const styles = StyleSheet.create({
   resetButton: {
     position: 'absolute',
     top: 100,
-    right: SPACING.lg,
+    right: CITY_SPACING.lg,
     zIndex: 10,
     width: 44,
     height: 44,
-    borderRadius: RADIUS.full,
-    backgroundColor: COLORS.mapOverlay,
+    borderRadius: CITY_RADIUS.full,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderWidth: 2,
+    borderColor: CITY_THEME_COLORS.accent,
     justifyContent: 'center',
     alignItems: 'center',
-    ...SHADOWS.md,
+    ...CITY_SHADOWS.md,
   },
   photoMarker: {
-    width: PIN_SIZE.photo,
-    height: PIN_SIZE.photo,
-    borderRadius: PIN_SIZE.photo / 2,
+    width: CITY_PIN_SIZE.photo,
+    height: CITY_PIN_SIZE.photo,
+    borderRadius: CITY_PIN_SIZE.photo / 2,
     borderWidth: 3,
-    borderColor: COLORS.textPrimary,
-    backgroundColor: COLORS.photoPin,
+    borderColor: CITY_THEME_COLORS.primary,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: CITY_THEME_COLORS.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 6,
     elevation: 4,
   },
   photoImage: {
-    width: PIN_SIZE.photo - 6,
-    height: PIN_SIZE.photo - 6,
-    borderRadius: (PIN_SIZE.photo - 6) / 2,
+    width: CITY_PIN_SIZE.photo - 6,
+    height: CITY_PIN_SIZE.photo - 6,
+    borderRadius: (CITY_PIN_SIZE.photo - 6) / 2,
   },
   textMarker: {
-    width: PIN_SIZE.text,
-    height: PIN_SIZE.text,
-    borderRadius: PIN_SIZE.text / 2,
+    width: CITY_PIN_SIZE.text,
+    height: CITY_PIN_SIZE.text,
+    borderRadius: CITY_PIN_SIZE.text / 2,
     borderWidth: 2,
-    borderColor: COLORS.textPin,
-    backgroundColor: COLORS.backgroundCard,
+    borderColor: CITY_THEME_COLORS.accentSecondary,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: CITY_THEME_COLORS.accentSecondary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 6,
     elevation: 4,
   },
   textChar: {
     fontSize: 18,
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.accentSecondary,
     fontWeight: '600',
   },
   nullMarker: {
-    width: PIN_SIZE.text,
-    height: PIN_SIZE.text,
-    borderRadius: PIN_SIZE.text / 2,
+    width: CITY_PIN_SIZE.text,
+    height: CITY_PIN_SIZE.text,
+    borderRadius: CITY_PIN_SIZE.text / 2,
     borderWidth: 2,
-    borderColor: COLORS.textMuted,
-    backgroundColor: COLORS.surface,
+    borderColor: CITY_THEME_COLORS.textMuted,
+    backgroundColor: CITY_THEME_COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: CITY_THEME_COLORS.textMuted,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
   },
   nullChar: {
     fontSize: 16,
-    color: COLORS.textMuted,
+    color: CITY_THEME_COLORS.textMuted,
     fontWeight: '600',
   },
   clusterContainer: {
-    width: PIN_SIZE.cluster,
-    height: PIN_SIZE.cluster,
-    borderRadius: PIN_SIZE.cluster / 2,
-    backgroundColor: COLORS.cluster,
-    borderWidth: 3,
-    borderColor: COLORS.textPrimary,
+    width: CITY_PIN_SIZE.cluster,
+    height: CITY_PIN_SIZE.cluster,
+    borderRadius: CITY_PIN_SIZE.cluster / 2,
+    backgroundColor: CITY_THEME_COLORS.cluster,
+    borderWidth: 2,
+    borderColor: CITY_THEME_COLORS.backgroundCard,
     justifyContent: 'center',
     alignItems: 'center',
     opacity: 0.95,
-    shadowColor: '#000',
+    shadowColor: CITY_THEME_COLORS.cluster,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
     elevation: 4,
   },
   clusterText: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
   },
 });
+

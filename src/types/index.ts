@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Type Definitions
+// My Sydney - Type Definitions
 // ============================================
 
 export type PinType = 'photo' | 'text';
@@ -81,5 +81,3 @@ export type RootStackParamList = {
 export type MainTabParamList = {
   Showcase: undefined;
 };
-
-

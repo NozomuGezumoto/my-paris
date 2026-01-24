@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Category Bottom Sheet
+// My City - Category Bottom Sheet
 // Scrollable list of categories with counts
 // ============================================
 
@@ -11,7 +11,7 @@ import {
   Pressable,
 } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { COLORS, TYPOGRAPHY, SPACING, RADIUS } from '../../constants/theme';
+import { CITY_THEME_COLORS, CITY_TYPOGRAPHY, CITY_SPACING, CITY_RADIUS } from '../../constants/city-theme';
 import { useStore } from '../../store/useStore';
 import { CategoryWithCount } from '../../types';
 
@@ -121,25 +121,25 @@ const CategorySheet = forwardRef<BottomSheet, CategorySheetProps>(
 
 const styles = StyleSheet.create({
   sheetBackground: {
-    backgroundColor: COLORS.backgroundElevated,
-    borderTopLeftRadius: RADIUS.xl,
-    borderTopRightRadius: RADIUS.xl,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderTopLeftRadius: CITY_RADIUS.xl,
+    borderTopRightRadius: CITY_RADIUS.xl,
   },
   handleIndicator: {
-    backgroundColor: COLORS.textMuted,
+    backgroundColor: CITY_THEME_COLORS.textMuted,
     width: 32,
     height: 4,
-    marginTop: 6,  // ドラッグバーを少し下げる
+    marginTop: 6,
   },
   header: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: 2,   // −4px：タイトル上を締める
-    paddingBottom: 4, // −4px：タイトル下を締める
+    paddingHorizontal: CITY_SPACING.lg,
+    paddingTop: 2,
+    paddingBottom: 4,
   },
   title: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
     fontWeight: '500',
-    color: COLORS.textMuted,
+    color: CITY_THEME_COLORS.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
@@ -147,69 +147,69 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: SPACING.lg,
+    paddingHorizontal: CITY_SPACING.lg,
     paddingTop: 2,
-    paddingBottom: 32,  // +8px：ホームインジケータ上に呼吸を
+    paddingBottom: 32,
   },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    rowGap: SPACING.xs,
-    columnGap: SPACING.md,
+    rowGap: CITY_SPACING.xs,
+    columnGap: CITY_SPACING.md,
   },
   categoryItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 6,
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: CITY_SPACING.sm,
     backgroundColor: 'transparent',
-    borderRadius: RADIUS.sm,
+    borderRadius: CITY_RADIUS.sm,
   },
   categoryItemSelected: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: CITY_THEME_COLORS.primary,
   },
   categoryName: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textSecondary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textSecondary,
     marginRight: 4,
   },
   categoryNameSelected: {
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
     fontWeight: '600',
   },
   countText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textMuted,
   },
   countTextSelected: {
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
   },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: SPACING.xxxl,
+    paddingVertical: CITY_SPACING.xxxl,
   },
   emptyText: {
-    fontSize: TYPOGRAPHY.fontSize.lg,
-    color: COLORS.textSecondary,
-    marginBottom: SPACING.sm,
+    fontSize: CITY_TYPOGRAPHY.fontSize.lg,
+    color: CITY_THEME_COLORS.textSecondary,
+    marginBottom: CITY_SPACING.sm,
   },
   emptySubtext: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textMuted,
   },
   clearButton: {
-    margin: SPACING.lg,
+    margin: CITY_SPACING.lg,
     marginTop: 0,
-    padding: SPACING.md,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
+    padding: CITY_SPACING.md,
+    backgroundColor: CITY_THEME_COLORS.surface,
+    borderRadius: CITY_RADIUS.lg,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: CITY_THEME_COLORS.border,
   },
   clearButtonText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textSecondary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textSecondary,
     fontWeight: '500',
   },
 });

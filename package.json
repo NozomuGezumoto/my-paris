@@ -1,5 +1,5 @@
 {
-  "name": "my-kyoto-54",
+  "name": "my-city",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -8,7 +8,35 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+
+    "start:kyoto": "set CITY=kyoto&& expo start --tunnel",
+    "start:sydney": "set CITY=sydney&& expo start --tunnel",
+    "start:paris": "set CITY=paris&& expo start --tunnel",
+    "start:london": "set CITY=london&& expo start --tunnel",
+    "start:rome": "set CITY=rome&& expo start --tunnel",
+    "start:bangkok": "set CITY=bangkok&& expo start --tunnel",
+    "start:kuantan": "set CITY=kuantan&& expo start --tunnel",
+    "start:tokyo": "set CITY=tokyo&& expo start --tunnel",
+    "start:taipei": "set CITY=taipei&& expo start --tunnel",
+    "start:barcelona": "set CITY=barcelona&& expo start --tunnel",
+    "start:berlin": "set CITY=berlin&& expo start --tunnel",
+    "start:rio": "set CITY=rio&& expo start --tunnel",
+    "start:marrakech": "set CITY=marrakech&& expo start --tunnel",
+
+    "build:kyoto": "set CITY=kyoto&& eas build",
+    "build:sydney": "set CITY=sydney&& eas build",
+    "build:paris": "set CITY=paris&& eas build",
+    "build:london": "set CITY=london&& eas build",
+    "build:rome": "set CITY=rome&& eas build",
+    "build:bangkok": "set CITY=bangkok&& eas build",
+    "build:kuantan": "set CITY=kuantan&& eas build",
+    "build:tokyo": "set CITY=tokyo&& eas build",
+    "build:taipei": "set CITY=taipei&& eas build",
+    "build:barcelona": "set CITY=barcelona&& eas build",
+    "build:berlin": "set CITY=berlin&& eas build",
+    "build:rio": "set CITY=rio&& eas build",
+    "build:marrakech": "set CITY=marrakech&& eas build"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

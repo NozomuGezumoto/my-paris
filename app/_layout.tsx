@@ -1,21 +1,21 @@
 // ============================================
-// My Kyoto - Root Layout
+// My City - Root Layout
 // ============================================
 
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../src/constants/theme';
+import { CITY_THEME_COLORS } from '../src/constants/city-theme';
 
 export default function RootLayout() {
   return (
     <GestureHandlerRootView style={styles.container}>
-      <StatusBar style="light" backgroundColor={COLORS.background} />
+      <StatusBar style="dark" backgroundColor={CITY_THEME_COLORS.background} />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: COLORS.background },
+          contentStyle: { backgroundColor: CITY_THEME_COLORS.background },
           animation: 'slide_from_right',
         }}
       >
@@ -36,6 +36,6 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: CITY_THEME_COLORS.background,
   },
 });

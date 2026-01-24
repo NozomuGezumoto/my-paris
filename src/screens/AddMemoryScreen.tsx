@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Add Memory Screen
+// My City - Add Memory Screen
 // Registration screen for new memories
 // ============================================
 
@@ -23,8 +23,15 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { KYOTO_CENTER, isWithinKyoto } from '../constants/kyoto';
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '../constants/theme';
+import {
+  CITY_CENTER,
+  CITY_NAME,
+  isWithinCity,
+  CITY_THEME_COLORS,
+  CITY_RADIUS,
+  CITY_SPACING,
+  CITY_TYPOGRAPHY,
+} from '../constants/city-theme';
 import { useStore } from '../store/useStore';
 import { PinType, RootStackParamList } from '../types';
 
@@ -33,19 +40,16 @@ type AddMemoryRouteProp = RouteProp<RootStackParamList, 'AddMemory'>;
 
 // Common emoji suggestions for text pins
 const EMOJI_SUGGESTIONS = [
-  '🍵', '⛩️', '🌸', '🍡', '🎋', '🏯', '🎎', '⚔️', '🦊', '🍶',
-
-  // 追加 20
-  '🌙', '🏮', '🎐', '🍁', '🌊', '🧧', '🎭', '🪭', '🪷', '🧿',
-  '🍙', '🍜', '🥢', '🛕', '🕯️', '🌾', '🐦', '🦋', '🔥', '🎇',
+  '📍', '⭐', '❤️', '🏠', '🍽️', '☕', '🎭', '🏛️', '🎨', '📸',
+  '🌸', '🌳', '⛩️', '🏰', '🗼', '🌊', '🏖️', '⛵', '🎡', '🚶',
+  '🍜', '🍣', '🍷', '🍺', '🎵', '🎸', '✨', '💫', '🌙', '☀️',
 ];
-const KANJI_SUGGESTIONS = [
-  '寺', '神', '茶', '桜', '竹', '雅', '侍', '京', '和', '縁',
-
-  // 追加 20
-  '祭', '夜', '灯', '道', '旅', '夏', '月', '風', '庭', '影',
-  '静', '里', '川', '山', '彩', '情', '心', '時', '景', '宵',
+const SYMBOL_SUGGESTIONS = [
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'M', 'N',
+  '◆', '◇', '✦', '✧', '⬡', '1', '2', '3', '4', '5',
+  '★', '♥', '☆', '♪', '●', '+', '&', '@', '#', '!',
 ];
+
 export default function AddMemoryScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<AddMemoryRouteProp>();
@@ -62,8 +66,8 @@ export default function AddMemoryScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   // Location state
-  const [latitude, setLatitude] = useState(route.params?.initialLat ?? KYOTO_CENTER.latitude);
-  const [longitude, setLongitude] = useState(route.params?.initialLng ?? KYOTO_CENTER.longitude);
+  const [latitude, setLatitude] = useState(route.params?.initialLat ?? CITY_CENTER.latitude);
+  const [longitude, setLongitude] = useState(route.params?.initialLng ?? CITY_CENTER.longitude);
   const [locationLabel, setLocationLabel] = useState('');
 
   // Categories state
@@ -94,14 +98,14 @@ export default function AddMemoryScreen() {
       const location = await Location.getCurrentPositionAsync({});
       const { latitude: lat, longitude: lng } = location.coords;
 
-      if (isWithinKyoto(lat, lng)) {
+      if (isWithinCity(lat, lng)) {
         setLatitude(lat);
         setLongitude(lng);
         setLocationLabel('Current Location');
       } else {
         Alert.alert(
-          '京都市外',
-          'You are outside Kyoto City. Memories can only be added within Kyoto.',
+          `Outside ${CITY_NAME}`,
+          `You are outside ${CITY_NAME} region. Memories can only be added within ${CITY_NAME} area.`,
           [{ text: 'OK' }]
         );
       }
@@ -158,8 +162,8 @@ export default function AddMemoryScreen() {
       Alert.alert('Character Required', 'Please enter a character for this memory.');
       return;
     }
-    if (!isWithinKyoto(latitude, longitude)) {
-      Alert.alert('Location Error', 'Memory location must be within Kyoto City.');
+    if (!isWithinCity(latitude, longitude)) {
+      Alert.alert('Location Error', `Memory location must be within ${CITY_NAME} region.`);
       return;
     }
 
@@ -198,13 +202,13 @@ export default function AddMemoryScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Header */}
-      <View style={[styles.header, { paddingTop: insets.top + SPACING.md }]}>
+      <View style={[styles.header, { paddingTop: insets.top + CITY_SPACING.md }]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color={COLORS.textPrimary} />
+          <Ionicons name="close" size={24} color={CITY_THEME_COLORS.textPrimary} />
         </Pressable>
-        <Text style={styles.headerTitle}>新しい記憶</Text>
+        <Text style={styles.headerTitle}>New Memory</Text>
         <Pressable onPress={handleSave} style={styles.headerButton}>
-          <Text style={styles.saveText}>保存</Text>
+          <Text style={styles.saveText}>Save</Text>
         </Pressable>
       </View>
 
@@ -215,7 +219,7 @@ export default function AddMemoryScreen() {
       >
         {/* Pin Type Selection */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>記憶のタイプ</Text>
+          <Text style={styles.sectionTitle}>Memory Type</Text>
           <View style={styles.pinTypeContainer}>
             <Pressable
               style={[styles.pinTypeButton, pinType === 'photo' && styles.pinTypeButtonActive]}
@@ -224,12 +228,12 @@ export default function AddMemoryScreen() {
               <Ionicons
                 name="camera"
                 size={24}
-                color={pinType === 'photo' ? COLORS.textPrimary : COLORS.textMuted}
+                color={pinType === 'photo' ? CITY_THEME_COLORS.backgroundCard : CITY_THEME_COLORS.textMuted}
               />
               <Text
                 style={[styles.pinTypeText, pinType === 'photo' && styles.pinTypeTextActive]}
               >
-                写真
+                Photo
               </Text>
             </Pressable>
             <Pressable
@@ -242,12 +246,12 @@ export default function AddMemoryScreen() {
                   pinType === 'text' && styles.pinTypeIconActive,
                 ]}
               >
-                文
+                A
               </Text>
               <Text
                 style={[styles.pinTypeText, pinType === 'text' && styles.pinTypeTextActive]}
               >
-                文字
+                Text
               </Text>
             </Pressable>
           </View>
@@ -261,8 +265,8 @@ export default function AddMemoryScreen() {
                 <Image source={{ uri: photoUri }} style={styles.photoPreview} />
               ) : (
                 <View style={styles.photoPlaceholder}>
-                  <Ionicons name="image-outline" size={48} color={COLORS.textMuted} />
-                  <Text style={styles.photoPlaceholderText}>写真を選択</Text>
+                  <Ionicons name="image-outline" size={48} color={CITY_THEME_COLORS.textMuted} />
+                  <Text style={styles.photoPlaceholderText}>Select Photo</Text>
                 </View>
               )}
             </Pressable>
@@ -273,17 +277,17 @@ export default function AddMemoryScreen() {
         {pinType === 'text' && (
           <View style={styles.section}>
             <View style={styles.textCharContainer}>
-              <TextInput
+                <TextInput
                 style={styles.textCharInput}
                 value={textChar}
                 onChangeText={handleTextCharChange}
-                placeholder="文"
-                placeholderTextColor={COLORS.textMuted}
+                placeholder="📍"
+                placeholderTextColor={CITY_THEME_COLORS.textMuted}
                 maxLength={2}
                 textAlign="center"
               />
             </View>
-            <Text style={styles.helperText}>漢字、ひらがな、絵文字など1文字</Text>
+            <Text style={styles.helperText}>Letter, Number, Emoji, Symbol...</Text>
 
             {/* Quick suggestions */}
             <View style={styles.suggestionsRow}>
@@ -301,16 +305,16 @@ export default function AddMemoryScreen() {
               ))}
             </View>
             <View style={styles.suggestionsRow}>
-              {KANJI_SUGGESTIONS.map((kanji) => (
+              {SYMBOL_SUGGESTIONS.map((symbol) => (
                 <Pressable
-                  key={kanji}
+                  key={symbol}
                   style={styles.suggestionChip}
                   onPress={() => {
-                    setTextChar(kanji);
+                    setTextChar(symbol);
                     setPinType('text');
                   }}
                 >
-                  <Text style={styles.suggestionText}>{kanji}</Text>
+                  <Text style={styles.suggestionText}>{symbol}</Text>
                 </Pressable>
               ))}
             </View>
@@ -319,29 +323,29 @@ export default function AddMemoryScreen() {
 
         {/* Location */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>場所</Text>
+          <Text style={styles.sectionTitle}>Location</Text>
           <View style={styles.locationDisplay}>
-            <Ionicons name="location" size={20} color={COLORS.primary} />
+            <Ionicons name="location" size={20} color={CITY_THEME_COLORS.primary} />
             <Text style={styles.locationText}>
               {locationLabel || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`}
             </Text>
           </View>
           <Pressable style={styles.locationButton} onPress={getCurrentLocation}>
-            <Ionicons name="navigate" size={18} color={COLORS.textSecondary} />
-            <Text style={styles.locationButtonText}>現在地を使用</Text>
+            <Ionicons name="navigate" size={18} color={CITY_THEME_COLORS.textSecondary} />
+            <Text style={styles.locationButtonText}>Use Current Location</Text>
           </Pressable>
         </View>
 
         {/* Date */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>訪問日</Text>
+          <Text style={styles.sectionTitle}>Visit Date</Text>
           <Pressable
             style={styles.dateButton}
             onPress={() => setShowDatePicker(true)}
           >
-            <Ionicons name="calendar-outline" size={20} color={COLORS.textSecondary} />
+            <Ionicons name="calendar-outline" size={20} color={CITY_THEME_COLORS.textSecondary} />
             <Text style={styles.dateText}>
-              {visitedAt.toLocaleDateString('ja-JP', {
+              {visitedAt.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -364,13 +368,13 @@ export default function AddMemoryScreen() {
 
         {/* Note */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>メモ（任意）</Text>
+          <Text style={styles.sectionTitle}>Note (Optional)</Text>
           <TextInput
             style={styles.noteInput}
             value={note}
             onChangeText={setNote}
-            placeholder="この記憶について..."
-            placeholderTextColor={COLORS.textMuted}
+            placeholder="About this memory..."
+            placeholderTextColor={CITY_THEME_COLORS.textMuted}
             multiline
             numberOfLines={3}
           />
@@ -378,7 +382,7 @@ export default function AddMemoryScreen() {
 
         {/* Categories */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>カテゴリー</Text>
+          <Text style={styles.sectionTitle}>Categories</Text>
           <View style={styles.categoriesContainer}>
             {categories.map((cat) => (
               <Pressable
@@ -405,8 +409,8 @@ export default function AddMemoryScreen() {
               style={styles.newCategoryInput}
               value={newCategoryName}
               onChangeText={setNewCategoryName}
-              placeholder="新しいカテゴリー"
-              placeholderTextColor={COLORS.textMuted}
+              placeholder="New Category"
+              placeholderTextColor={CITY_THEME_COLORS.textMuted}
               onSubmitEditing={handleAddCategory}
             />
             <Pressable
@@ -417,49 +421,49 @@ export default function AddMemoryScreen() {
               onPress={handleAddCategory}
               disabled={!newCategoryName.trim()}
             >
-              <Ionicons name="add" size={20} color={COLORS.textPrimary} />
+              <Ionicons name="add" size={20} color={CITY_THEME_COLORS.backgroundCard} />
             </Pressable>
           </View>
         </View>
 
         {/* Context Metadata */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>コンテキスト（任意）</Text>
-          <Text style={styles.helperText}>後で思い出すための自由なタグ</Text>
+          <Text style={styles.sectionTitle}>Context (Optional)</Text>
+          <Text style={styles.helperText}>Free tags to help you remember</Text>
           <View style={styles.slotsContainer}>
             <TextInput
               style={styles.slotInput}
               value={slot1}
               onChangeText={setSlot1}
-              placeholder="スロット 1"
-              placeholderTextColor={COLORS.textMuted}
+              placeholder="Slot 1"
+              placeholderTextColor={CITY_THEME_COLORS.textMuted}
             />
             <TextInput
               style={styles.slotInput}
               value={slot2}
               onChangeText={setSlot2}
-              placeholder="スロット 2"
-              placeholderTextColor={COLORS.textMuted}
+              placeholder="Slot 2"
+              placeholderTextColor={CITY_THEME_COLORS.textMuted}
             />
             <TextInput
               style={styles.slotInput}
               value={slot3}
               onChangeText={setSlot3}
-              placeholder="スロット 3"
-              placeholderTextColor={COLORS.textMuted}
+              placeholder="Slot 3"
+              placeholderTextColor={CITY_THEME_COLORS.textMuted}
             />
             <TextInput
               style={styles.slotInput}
               value={slot4}
               onChangeText={setSlot4}
-              placeholder="スロット 4"
-              placeholderTextColor={COLORS.textMuted}
+              placeholder="Slot 4"
+              placeholderTextColor={CITY_THEME_COLORS.textMuted}
             />
           </View>
         </View>
 
         {/* Bottom padding */}
-        <View style={{ height: insets.bottom + SPACING.xxxl }} />
+        <View style={{ height: insets.bottom + CITY_SPACING.xxxl }} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -468,96 +472,96 @@ export default function AddMemoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: CITY_THEME_COLORS.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.md,
+    paddingHorizontal: CITY_SPACING.lg,
+    paddingBottom: CITY_SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: CITY_THEME_COLORS.border,
   },
   headerButton: {
-    padding: SPACING.sm,
+    padding: CITY_SPACING.sm,
   },
   headerTitle: {
-    fontSize: TYPOGRAPHY.fontSize.lg,
+    fontSize: CITY_TYPOGRAPHY.fontSize.lg,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   saveText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: CITY_THEME_COLORS.primary,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: SPACING.lg,
+    padding: CITY_SPACING.lg,
   },
   section: {
-    marginBottom: SPACING.xl,
+    marginBottom: CITY_SPACING.xl,
   },
   sectionTitle: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
     fontWeight: '600',
-    color: COLORS.textMuted,
+    color: CITY_THEME_COLORS.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: SPACING.md,
+    marginBottom: CITY_SPACING.md,
   },
   helperText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textMuted,
-    marginTop: SPACING.sm,
-    marginBottom: SPACING.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textMuted,
+    marginTop: CITY_SPACING.sm,
+    marginBottom: CITY_SPACING.md,
   },
   pinTypeContainer: {
     flexDirection: 'row',
-    gap: SPACING.md,
+    gap: CITY_SPACING.md,
   },
   pinTypeButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: SPACING.sm,
-    padding: SPACING.lg,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
+    gap: CITY_SPACING.sm,
+    padding: CITY_SPACING.lg,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.lg,
     borderWidth: 2,
-    borderColor: COLORS.border,
+    borderColor: CITY_THEME_COLORS.border,
   },
   pinTypeButtonActive: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.backgroundCard,
+    borderColor: CITY_THEME_COLORS.primary,
+    backgroundColor: CITY_THEME_COLORS.primary,
   },
   pinTypeIcon: {
-    fontSize: TYPOGRAPHY.fontSize.xxl,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.xxl,
+    color: CITY_THEME_COLORS.textMuted,
   },
   pinTypeIconActive: {
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
   },
   pinTypeText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textMuted,
   },
   pinTypeTextActive: {
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
     fontWeight: '600',
   },
   photoSelector: {
     width: '100%',
     aspectRatio: 1,
-    borderRadius: RADIUS.lg,
+    borderRadius: CITY_RADIUS.lg,
     overflow: 'hidden',
-    backgroundColor: COLORS.surface,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
     borderWidth: 2,
-    borderColor: COLORS.border,
+    borderColor: CITY_THEME_COLORS.border,
     borderStyle: 'dashed',
   },
   photoPreview: {
@@ -568,21 +572,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: SPACING.md,
+    gap: CITY_SPACING.md,
   },
   photoPlaceholderText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textMuted,
   },
   textCharContainer: {
     alignItems: 'center',
-    padding: SPACING.xl,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
+    padding: CITY_SPACING.xl,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.lg,
   },
   textCharInput: {
     fontSize: 72,
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.textPrimary,
     width: 100,
     height: 100,
     textAlign: 'center',
@@ -590,130 +594,128 @@ const styles = StyleSheet.create({
   suggestionsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.sm,
-    marginTop: SPACING.sm,
+    gap: CITY_SPACING.sm,
+    marginTop: CITY_SPACING.sm,
   },
   suggestionChip: {
     width: 44,
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.md,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: CITY_THEME_COLORS.border,
   },
   suggestionText: {
-    fontSize: TYPOGRAPHY.fontSize.xl,
+    fontSize: CITY_TYPOGRAPHY.fontSize.xl,
   },
   locationDisplay: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
-    padding: SPACING.lg,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
+    gap: CITY_SPACING.sm,
+    padding: CITY_SPACING.lg,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.lg,
   },
   locationText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   locationButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: SPACING.sm,
-    marginTop: SPACING.md,
-    padding: SPACING.md,
-    backgroundColor: COLORS.backgroundCard,
-    borderRadius: RADIUS.md,
+    gap: CITY_SPACING.sm,
+    marginTop: CITY_SPACING.md,
+    padding: CITY_SPACING.md,
+    backgroundColor: CITY_THEME_COLORS.surface,
+    borderRadius: CITY_RADIUS.md,
   },
   locationButtonText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textSecondary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textSecondary,
   },
   dateButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.md,
-    padding: SPACING.lg,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
+    gap: CITY_SPACING.md,
+    padding: CITY_SPACING.lg,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.lg,
   },
   dateText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   noteInput: {
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.lg,
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.lg,
+    padding: CITY_SPACING.lg,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
     minHeight: 100,
     textAlignVertical: 'top',
   },
   categoriesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.sm,
-    marginBottom: SPACING.md,
+    gap: CITY_SPACING.sm,
+    marginBottom: CITY_SPACING.md,
   },
   categoryChip: {
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.full,
+    paddingHorizontal: CITY_SPACING.md,
+    paddingVertical: CITY_SPACING.sm,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.full,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: CITY_THEME_COLORS.border,
   },
   categoryChipSelected: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
+    backgroundColor: CITY_THEME_COLORS.primary,
+    borderColor: CITY_THEME_COLORS.primary,
   },
   categoryChipText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textSecondary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textSecondary,
   },
   categoryChipTextSelected: {
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
     fontWeight: '500',
   },
   newCategoryRow: {
     flexDirection: 'row',
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   newCategoryInput: {
     flex: 1,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.md,
-    padding: SPACING.md,
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.md,
+    padding: CITY_SPACING.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   addCategoryButton: {
     width: 44,
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.primary,
-    borderRadius: RADIUS.md,
+    backgroundColor: CITY_THEME_COLORS.primary,
+    borderRadius: CITY_RADIUS.md,
   },
   addCategoryButtonDisabled: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: CITY_THEME_COLORS.surface,
   },
   slotsContainer: {
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   slotInput: {
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.md,
-    padding: SPACING.md,
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderRadius: CITY_RADIUS.md,
+    padding: CITY_SPACING.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: CITY_THEME_COLORS.border,
   },
 });
-
-

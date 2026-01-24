@@ -1,14 +1,14 @@
 // ============================================
-// My Kyoto - Showcase Map Screen (Main)
+// My City - Showcase Map Screen (Main)
 // ============================================
 
 import React, { useRef, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { COLORS } from '../../src/constants/theme';
+import { CITY_THEME_COLORS } from '../../src/constants/city-theme';
 import { MemoryPin } from '../../src/types';
-import KyotoMap from '../../src/components/map/KyotoMap';
+import CityMap from '../../src/components/map/CityMap';
 import MapOverlay from '../../src/components/ui/MapOverlay';
 import CategorySheet from '../../src/components/ui/CategorySheet';
 
@@ -17,7 +17,7 @@ export default function ShowcaseMapScreen() {
   const categorySheetRef = useRef<BottomSheet>(null);
 
   const handlePinPress = useCallback((pin: MemoryPin) => {
-    // 直接詳細画面へ遷移
+    // Navigate directly to detail screen
     router.push(`/pin/${pin.id}`);
   }, [router]);
 
@@ -45,7 +45,7 @@ export default function ShowcaseMapScreen() {
   return (
     <View style={styles.container}>
       {/* Full-screen map */}
-      <KyotoMap
+      <CityMap
         onPinPress={handlePinPress}
         onLongPress={handleLongPress}
       />
@@ -65,6 +65,6 @@ export default function ShowcaseMapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: CITY_THEME_COLORS.background,
   },
 });

@@ -1,25 +1,25 @@
 // ============================================
-// My Kyoto - Location Hook
+// My Tokyo - Location Hook
 // Handles location permissions and current position
 // ============================================
 
 import { useState, useEffect, useCallback } from 'react';
 import * as Location from 'expo-location';
-import { isWithinKyoto, KYOTO_CENTER } from '../constants/kyoto';
+import { isWithinTokyo, TOKYO_CENTER } from '../constants/tokyo';
 
 interface LocationState {
   latitude: number;
   longitude: number;
-  isInKyoto: boolean;
+  isInTokyo: boolean;
   isLoading: boolean;
   error: string | null;
 }
 
 export function useLocation() {
   const [location, setLocation] = useState<LocationState>({
-    latitude: KYOTO_CENTER.latitude,
-    longitude: KYOTO_CENTER.longitude,
-    isInKyoto: true,
+    latitude: TOKYO_CENTER.latitude,
+    longitude: TOKYO_CENTER.longitude,
+    isInTokyo: true,
     isLoading: false,
     error: null,
   });
@@ -56,17 +56,17 @@ export function useLocation() {
       });
 
       const { latitude, longitude } = position.coords;
-      const isInKyoto = isWithinKyoto(latitude, longitude);
+      const isInTokyo = isWithinTokyo(latitude, longitude);
 
       setLocation({
         latitude,
         longitude,
-        isInKyoto,
+        isInTokyo,
         isLoading: false,
-        error: isInKyoto ? null : 'Location is outside Kyoto City',
+        error: isInTokyo ? null : 'Location is outside Tokyo region',
       });
 
-      return { latitude, longitude, isInKyoto };
+      return { latitude, longitude, isInTokyo };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to get location';
       setLocation((prev) => ({
@@ -85,5 +85,3 @@ export function useLocation() {
     getCurrentLocation,
   };
 }
-
-

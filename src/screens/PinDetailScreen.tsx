@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Pin Detail Screen
+// My City - Pin Detail Screen
 // Full-screen view of a memory pin
 // ============================================
 
@@ -19,7 +19,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { COLORS, TYPOGRAPHY, SPACING, RADIUS } from '../constants/theme';
+import { CITY_THEME_COLORS, CITY_TYPOGRAPHY, CITY_SPACING, CITY_RADIUS } from '../constants/city-theme';
 import { RootStackParamList } from '../types';
 import { useStore } from '../store/useStore';
 
@@ -69,20 +69,20 @@ export default function PinDetailScreen() {
   };
 
   const visitedDate = pin.visitedAt
-    ? format(new Date(pin.visitedAt), 'yyyy年M月d日')
+    ? format(new Date(pin.visitedAt), 'd MMMM yyyy')
     : null;
 
-  const createdDate = format(new Date(pin.createdAt), 'yyyy/MM/dd HH:mm');
+  const createdDate = format(new Date(pin.createdAt), 'dd/MM/yyyy HH:mm');
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.headerButton}>
-          <Ionicons name="chevron-back" size={28} color={COLORS.textPrimary} />
+          <Ionicons name="chevron-back" size={28} color={CITY_THEME_COLORS.textPrimary} />
         </Pressable>
         <Pressable onPress={handleDelete} style={styles.headerButton}>
-          <Ionicons name="trash-outline" size={24} color={COLORS.error} />
+          <Ionicons name="trash-outline" size={24} color={CITY_THEME_COLORS.error} />
         </Pressable>
       </View>
 
@@ -117,7 +117,7 @@ export default function PinDetailScreen() {
           {/* Categories */}
           {pin.categories.length > 0 && (
             <View style={styles.section}>
-              <Text style={styles.sectionLabel}>カテゴリー</Text>
+              <Text style={styles.sectionLabel}>Categories</Text>
               <View style={styles.tagsContainer}>
                 {pin.categories.map((cat) => (
                   <View key={cat.id} style={styles.categoryTag}>
@@ -131,7 +131,7 @@ export default function PinDetailScreen() {
           {/* Note */}
           {pin.note && (
             <View style={styles.section}>
-              <Text style={styles.sectionLabel}>メモ</Text>
+              <Text style={styles.sectionLabel}>Note</Text>
               <Text style={styles.noteText}>{pin.note}</Text>
             </View>
           )}
@@ -139,7 +139,7 @@ export default function PinDetailScreen() {
           {/* Context Metadata */}
           {pin.contextMeta && (
             <View style={styles.section}>
-              <Text style={styles.sectionLabel}>コンテキスト</Text>
+              <Text style={styles.sectionLabel}>Context</Text>
               <View style={styles.tagsContainer}>
                 {[
                   pin.contextMeta.slot1,
@@ -159,9 +159,9 @@ export default function PinDetailScreen() {
 
           {/* Location */}
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>位置情報</Text>
+            <Text style={styles.sectionLabel}>Location</Text>
             <View style={styles.locationRow}>
-              <Ionicons name="location" size={16} color={COLORS.primary} />
+              <Ionicons name="location" size={16} color={CITY_THEME_COLORS.primary} />
               <Text style={styles.locationText}>
                 {pin.lat.toFixed(6)}, {pin.lng.toFixed(6)}
               </Text>
@@ -180,7 +180,7 @@ export default function PinDetailScreen() {
         </View>
 
         {/* Bottom padding */}
-        <View style={{ height: insets.bottom + SPACING.xxxl }} />
+        <View style={{ height: insets.bottom + CITY_SPACING.xxxl }} />
       </ScrollView>
     </View>
   );
@@ -189,7 +189,7 @@ export default function PinDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: CITY_THEME_COLORS.background,
   },
   centerContent: {
     justifyContent: 'center',
@@ -203,10 +203,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: SPACING.md,
-    paddingBottom: SPACING.md,
+    paddingHorizontal: CITY_SPACING.md,
+    paddingBottom: CITY_SPACING.md,
     zIndex: 10,
-    backgroundColor: 'rgba(15, 15, 20, 0.7)',
+    backgroundColor: `${CITY_THEME_COLORS.background}dd`,
   },
   headerButton: {
     width: 44,
@@ -229,105 +229,103 @@ const styles = StyleSheet.create({
     height: SCREEN_WIDTH * 0.6,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: CITY_THEME_COLORS.surface,
   },
   heroText: {
     fontSize: 120,
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   content: {
-    padding: SPACING.xl,
+    padding: CITY_SPACING.xl,
   },
   dateRow: {
-    marginBottom: SPACING.xl,
+    marginBottom: CITY_SPACING.xl,
   },
   dateBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full,
+    backgroundColor: CITY_THEME_COLORS.primary,
+    paddingHorizontal: CITY_SPACING.lg,
+    paddingVertical: CITY_SPACING.sm,
+    borderRadius: CITY_RADIUS.full,
   },
   dateBadgeText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.backgroundCard,
   },
   section: {
-    marginBottom: SPACING.xl,
+    marginBottom: CITY_SPACING.xl,
   },
   sectionLabel: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
     fontWeight: '600',
-    color: COLORS.textMuted,
+    color: CITY_THEME_COLORS.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: SPACING.md,
+    marginBottom: CITY_SPACING.md,
   },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   categoryTag: {
-    backgroundColor: COLORS.backgroundCard,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    paddingHorizontal: CITY_SPACING.md,
+    paddingVertical: CITY_SPACING.sm,
+    borderRadius: CITY_RADIUS.full,
     borderWidth: 1,
-    borderColor: COLORS.primary,
+    borderColor: CITY_THEME_COLORS.primary,
   },
   categoryTagText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   contextTag: {
-    backgroundColor: COLORS.surface,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.md,
+    backgroundColor: CITY_THEME_COLORS.surface,
+    paddingHorizontal: CITY_SPACING.md,
+    paddingVertical: CITY_SPACING.sm,
+    borderRadius: CITY_RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.accentGold,
+    borderColor: CITY_THEME_COLORS.accentSecondary,
   },
   contextTagText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.accentGold,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.accentSecondary,
   },
   noteText: {
-    fontSize: TYPOGRAPHY.fontSize.lg,
-    color: COLORS.textPrimary,
-    lineHeight: TYPOGRAPHY.fontSize.lg * TYPOGRAPHY.lineHeight.relaxed,
+    fontSize: CITY_TYPOGRAPHY.fontSize.lg,
+    color: CITY_THEME_COLORS.textPrimary,
+    lineHeight: CITY_TYPOGRAPHY.fontSize.lg * CITY_TYPOGRAPHY.lineHeight.relaxed,
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   locationText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textSecondary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textSecondary,
     fontFamily: 'monospace',
   },
   metaSection: {
-    marginTop: SPACING.xl,
-    paddingTop: SPACING.xl,
+    marginTop: CITY_SPACING.xl,
+    paddingTop: CITY_SPACING.xl,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: CITY_THEME_COLORS.border,
   },
   metaText: {
-    fontSize: TYPOGRAPHY.fontSize.xs,
-    color: COLORS.textMuted,
-    marginBottom: SPACING.xs,
+    fontSize: CITY_TYPOGRAPHY.fontSize.xs,
+    color: CITY_THEME_COLORS.textMuted,
+    marginBottom: CITY_SPACING.xs,
   },
   errorText: {
-    fontSize: TYPOGRAPHY.fontSize.lg,
-    color: COLORS.textSecondary,
-    marginBottom: SPACING.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.lg,
+    color: CITY_THEME_COLORS.textSecondary,
+    marginBottom: CITY_SPACING.md,
   },
   backLink: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.primary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.primary,
   },
 });
-
-

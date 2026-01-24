@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Global State Management
+// My City - Global State Management
 // Using Zustand with AsyncStorage persistence
 // ============================================
 
@@ -15,6 +15,7 @@ import {
   MemoryPinWithDetails,
   CategoryWithCount,
 } from '../types';
+import { STORAGE_NAME } from '../config';
 
 interface StoreState {
   // Data
@@ -272,7 +273,7 @@ export const useStore = create<StoreState>()(
       },
     }),
     {
-      name: 'my-kyoto-storage',
+      name: STORAGE_NAME,
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         pins: state.pins,
@@ -283,4 +284,3 @@ export const useStore = create<StoreState>()(
     }
   )
 );
-

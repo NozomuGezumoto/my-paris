@@ -1,5 +1,5 @@
 // ============================================
-// My Kyoto - Pin Detail Bottom Sheet
+// My City - Pin Detail Bottom Sheet
 // Shows full details of selected memory pin
 // ============================================
 
@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { format } from 'date-fns';
-import { COLORS, TYPOGRAPHY, SPACING, RADIUS } from '../../constants/theme';
+import { CITY_THEME_COLORS, CITY_TYPOGRAPHY, CITY_SPACING, CITY_RADIUS } from '../../constants/city-theme';
 import { useStore } from '../../store/useStore';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -38,7 +38,7 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
     const snapPoints = useMemo(() => ['40%', '70%'], []);
 
     const visitedDate = pin?.visitedAt
-      ? format(new Date(pin.visitedAt), 'yyyy年M月d日')
+      ? format(new Date(pin.visitedAt), 'd MMM yyyy')
       : null;
 
     return (
@@ -75,7 +75,7 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
               {/* Date */}
               {visitedDate && (
                 <View style={styles.dateContainer}>
-                  <Text style={styles.dateLabel}>訪問日</Text>
+                  <Text style={styles.dateLabel}>Visited</Text>
                   <Text style={styles.dateValue}>{visitedDate}</Text>
                 </View>
               )}
@@ -83,7 +83,7 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
               {/* Categories */}
               {pin.categories.length > 0 && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>カテゴリー</Text>
+                  <Text style={styles.sectionTitle}>Categories</Text>
                   <View style={styles.categoriesContainer}>
                     {pin.categories.map((cat) => (
                       <View key={cat.id} style={styles.categoryChip}>
@@ -97,7 +97,7 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
               {/* Note */}
               {pin.note && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>メモ</Text>
+                  <Text style={styles.sectionTitle}>Note</Text>
                   <Text style={styles.noteText}>{pin.note}</Text>
                 </View>
               )}
@@ -105,7 +105,7 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
               {/* Context Metadata */}
               {pin.contextMeta && (
                 <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>コンテキスト</Text>
+                  <Text style={styles.sectionTitle}>Context</Text>
                   <View style={styles.metaContainer}>
                     {[
                       pin.contextMeta.slot1,
@@ -126,7 +126,7 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
               {/* Open Full Detail Button */}
               {onOpenFull && (
                 <Pressable style={styles.openButton} onPress={onOpenFull}>
-                  <Text style={styles.openButtonText}>詳細を開く</Text>
+                  <Text style={styles.openButtonText}>Open Details</Text>
                 </Pressable>
               )}
             </>
@@ -143,19 +143,19 @@ const PinDetailSheet = forwardRef<BottomSheet, PinDetailSheetProps>(
 
 const styles = StyleSheet.create({
   sheetBackground: {
-    backgroundColor: COLORS.backgroundElevated,
-    borderTopLeftRadius: RADIUS.xl,
-    borderTopRightRadius: RADIUS.xl,
+    backgroundColor: CITY_THEME_COLORS.backgroundCard,
+    borderTopLeftRadius: CITY_RADIUS.xl,
+    borderTopRightRadius: CITY_RADIUS.xl,
   },
   handleIndicator: {
-    backgroundColor: COLORS.textMuted,
+    backgroundColor: CITY_THEME_COLORS.textMuted,
     width: 40,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: SPACING.xxxl,
+    paddingBottom: CITY_SPACING.xxxl,
   },
   imageContainer: {
     width: SCREEN_WIDTH,
@@ -171,105 +171,105 @@ const styles = StyleSheet.create({
     height: IMAGE_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: CITY_THEME_COLORS.surface,
   },
   textChar: {
     fontSize: 72,
-    color: COLORS.textPrimary,
+    color: CITY_THEME_COLORS.textPrimary,
   },
   dateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.lg,
+    paddingHorizontal: CITY_SPACING.xl,
+    paddingVertical: CITY_SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: CITY_THEME_COLORS.border,
   },
   dateLabel: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textMuted,
-    marginRight: SPACING.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textMuted,
+    marginRight: CITY_SPACING.md,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   dateValue: {
-    fontSize: TYPOGRAPHY.fontSize.lg,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.lg,
+    color: CITY_THEME_COLORS.textPrimary,
     fontWeight: '500',
   },
   section: {
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.lg,
+    paddingHorizontal: CITY_SPACING.xl,
+    paddingVertical: CITY_SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: CITY_THEME_COLORS.border,
   },
   sectionTitle: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textMuted,
-    marginBottom: SPACING.md,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.textMuted,
+    marginBottom: CITY_SPACING.md,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   categoriesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   categoryChip: {
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.full,
+    backgroundColor: CITY_THEME_COLORS.primary,
+    paddingHorizontal: CITY_SPACING.md,
+    paddingVertical: CITY_SPACING.sm,
+    borderRadius: CITY_RADIUS.full,
   },
   categoryChipText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.backgroundCard,
     fontWeight: '500',
   },
   noteText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
-    lineHeight: TYPOGRAPHY.fontSize.md * TYPOGRAPHY.lineHeight.relaxed,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
+    lineHeight: CITY_TYPOGRAPHY.fontSize.md * CITY_TYPOGRAPHY.lineHeight.relaxed,
   },
   metaContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.sm,
+    gap: CITY_SPACING.sm,
   },
   metaChip: {
-    backgroundColor: COLORS.surface,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.md,
+    backgroundColor: CITY_THEME_COLORS.surface,
+    paddingHorizontal: CITY_SPACING.md,
+    paddingVertical: CITY_SPACING.sm,
+    borderRadius: CITY_RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.accentGold,
+    borderColor: CITY_THEME_COLORS.accentSecondary,
   },
   metaChipText: {
-    fontSize: TYPOGRAPHY.fontSize.sm,
-    color: COLORS.accentGold,
+    fontSize: CITY_TYPOGRAPHY.fontSize.sm,
+    color: CITY_THEME_COLORS.accentSecondary,
   },
   openButton: {
-    marginHorizontal: SPACING.xl,
-    marginTop: SPACING.xl,
-    padding: SPACING.lg,
-    backgroundColor: COLORS.surface,
-    borderRadius: RADIUS.lg,
+    marginHorizontal: CITY_SPACING.xl,
+    marginTop: CITY_SPACING.xl,
+    padding: CITY_SPACING.lg,
+    backgroundColor: CITY_THEME_COLORS.surface,
+    borderRadius: CITY_RADIUS.lg,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
+    borderColor: CITY_THEME_COLORS.borderLight,
   },
   openButtonText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textPrimary,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textPrimary,
     fontWeight: '500',
   },
   emptyState: {
-    padding: SPACING.xxxl,
+    padding: CITY_SPACING.xxxl,
     alignItems: 'center',
   },
   emptyText: {
-    fontSize: TYPOGRAPHY.fontSize.md,
-    color: COLORS.textMuted,
+    fontSize: CITY_TYPOGRAPHY.fontSize.md,
+    color: CITY_THEME_COLORS.textMuted,
   },
 });
 
